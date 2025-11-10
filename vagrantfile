@@ -1,0 +1,28 @@
+# Vagrantfile
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  backends = 3
+
+  config.vm.define "lb" do |lb|
+    lb.vm.hostname = "lb"
+    lb.vm.network "private_network", ip: "192.168.56.10"
+    lb.vm.network "forwarded_port", guest: 80, host: 8080
+    lb.vm.provision "shell", path: "provision/provision-lb.sh"
+  end
+
+  (1..backends).each do |i|
+    config.vm.define "web#{i}" do |web|
+      web.vm.hostname = "web#{i}"
+      ip = "192.168.56.#{10 + i}"
+      web.vm.network "private_network", ip: ip
+      web.vm.provision "shell", path: "provision/provision-web.sh", args: [i, ip]
+    end
+  end
+
+  config.vm.define "client" do |client|
+    client.vm.hostname = "client"
+    client.vm.network "private_network", ip: "192.168.56.50"
+    client.vm.provision "shell", path: "provision/provision-client.sh"
+  end
+end
