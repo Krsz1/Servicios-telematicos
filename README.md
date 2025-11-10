@@ -438,7 +438,7 @@ sudo npm install -g artillery  # Reinstalar si es necesario
 
 ## 👨‍💻 Autor
 
-Proyecto desarrollado para el curso de Sistemas Distribuidos.
+Krsna Gutiérrez González
 
 ---
 
