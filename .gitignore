@@ -1,0 +1,27 @@
+# Vagrant
+.vagrant/
+
+# Logs
+*.log
+
+# Scripts de diagnóstico temporales
+diagnostico.ps1
+test-web3.ps1
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules (si se usara localmente)
+node_modules/
+
+# Archivos temporales
+*.tmp
+*.temp

@@ -4,25 +4,58 @@ Vagrant.configure("2") do |config|
 
   backends = 3
 
+  # Configuración del Load Balancer
   config.vm.define "lb" do |lb|
     lb.vm.hostname = "lb"
     lb.vm.network "private_network", ip: "192.168.56.10"
     lb.vm.network "forwarded_port", guest: 80, host: 8080
+    
+    # Configuración de recursos para el balanceador
+    lb.vm.provider "virtualbox" do |vb|
+      vb.name = "loadbalancer-lb"
+      vb.memory = "2048"  # 2 GB de RAM
+      vb.cpus = 2
+      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+    end
+    
     lb.vm.provision "shell", path: "provision/provision-lb.sh"
   end
 
+  # Configuración de los servidores web backend
   (1..backends).each do |i|
     config.vm.define "web#{i}" do |web|
       web.vm.hostname = "web#{i}"
       ip = "192.168.56.#{10 + i}"
       web.vm.network "private_network", ip: ip
+      
+      # Configuración de recursos para servidores web
+      web.vm.provider "virtualbox" do |vb|
+        vb.name = "loadbalancer-web#{i}"
+        vb.memory = "1024"  # 1 GB de RAM
+        vb.cpus = 1
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+      end
+      
       web.vm.provision "shell", path: "provision/provision-web.sh", args: [i, ip]
     end
   end
 
+  # Configuración del cliente para pruebas
   config.vm.define "client" do |client|
     client.vm.hostname = "client"
     client.vm.network "private_network", ip: "192.168.56.50"
+    
+    # Configuración de recursos para el cliente (Artillery necesita más RAM)
+    client.vm.provider "virtualbox" do |vb|
+      vb.name = "loadbalancer-client"
+      vb.memory = "2048"  # 2 GB de RAM para Artillery
+      vb.cpus = 2
+      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+    end
+    
     client.vm.provision "shell", path: "provision/provision-client.sh"
   end
 end
