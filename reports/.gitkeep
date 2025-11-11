@@ -1,0 +1,2 @@
+# Este archivo mantiene el directorio reports/ en git
+# Los reportes generados (.json, .html, .md) están en .gitignore

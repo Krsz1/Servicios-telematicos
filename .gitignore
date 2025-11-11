@@ -1,8 +1,18 @@
 # Vagrant
 .vagrant/
+*.vagrant
 
 # Logs
 *.log
+logs/
+
+# Reportes de Artillery (JSON y HTML generados)
+reports/*.json
+reports/*.html
+reports/*_resumen.md
+
+# Mantener el directorio reports pero no los archivos generados
+!reports/.gitkeep
 
 # Scripts de diagnóstico temporales
 diagnostico.ps1
@@ -11,13 +21,15 @@ test-web3.ps1
 # Sistema operativo
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# IDEs
+# IDEs y editores
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+*.sublime-*
 
 # Node modules (si se usara localmente)
 node_modules/
@@ -25,3 +37,21 @@ node_modules/
 # Archivos temporales
 *.tmp
 *.temp
+*.bak
+*.backup
+
+# Archivos de caché
+.cache/
+*.cache
+
+# VirtualBox
+*.vbox-prev
+
+# SSH keys (por seguridad)
+*.pem
+*.key
+private_key*
+
+# Archivos de sistema
+*.pid
+*.sock
