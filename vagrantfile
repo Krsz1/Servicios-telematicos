@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     
-    lb.vm.provision "shell", path: "provision/provision-lb.sh"
+    lb.vm.provision "shell", path: "analysis/provision-lb.sh"
   end
 
   # Configuración de los servidores web backend
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       end
       
-      web.vm.provision "shell", path: "provision/provision-web.sh", args: [i, ip]
+      web.vm.provision "shell", path: "analysis/provision-web.sh", args: [i, ip]
     end
   end
 
@@ -56,6 +56,6 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     
-    client.vm.provision "shell", path: "provision/provision-client.sh"
+    client.vm.provision "shell", path: "analysis/provision-client.sh"
   end
 end
